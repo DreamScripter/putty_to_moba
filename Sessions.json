@@ -1,0 +1,67 @@
+{
+    "Sessions": [
+        {
+            "__type__": "Session",
+            "id:": "0",
+            "session_name:": "EXTRANET_APACHE_ejld124",
+            "host_name:": "ejld124ges",
+            "session_id:": "Servicios/22.interior/2.desarrollo/EXTRANET_APACHE_ejld124",
+            "group:": "Servicios",
+            "folder:": "22.interior",
+            "environ:": "2.desarrollo"
+        },
+        {
+            "__type__": "Session",
+            "id:": "1",
+            "session_name:": "ejld124ges",
+            "host_name:": "ejld124ges",
+            "session_id:": "Entornos/0.desarrollo/EXTRANET/APACHE/ejld124",
+            "group:": "Entornos",
+            "folder:": "0.desarrollo",
+            "context:": "EXTRANET",
+            "tech:": "APACHE"
+        },
+        {
+            "__type__": "Session",
+            "id:": "2",
+            "session_name:": "EXTRANET_WLS1036_ejld1006",
+            "host_name:": "ejld1006ges",
+            "session_id:": "Servicios/22.interior/2.desarrollo/EXTRANET_WLS1036_ejld1006",
+            "group:": "Servicios",
+            "folder:": "22.interior",
+            "environ:": "2.desarrollo"
+        },
+        {
+            "__type__": "Session",
+            "id:": "3",
+            "session_name:": "ejld1006ges",
+            "host_name:": "ejld1006ges",
+            "session_id:": "Entornos/0.desarrollo/EXTRANET/WLS1036/ejld1006",
+            "group:": "Entornos",
+            "folder:": "0.desarrollo",
+            "context:": "EXTRANET",
+            "tech:": "WLS1036"
+        },
+        {
+            "__type__": "Session",
+            "id:": "4",
+            "session_name:": "EXTRANET_WLS1036_ejld1007",
+            "host_name:": "ejld1007ges",
+            "session_id:": "Servicios/22.interior/2.desarrollo/EXTRANET_WLS1036_ejld1007",
+            "group:": "Servicios",
+            "folder:": "22.interior",
+            "environ:": "2.desarrollo"
+        },
+        {
+            "__type__": "Session",
+            "id:": "5",
+            "session_name:": "ejld1007ges",
+            "host_name:": "ejld1007ges",
+            "session_id:": "Entornos/0.desarrollo/EXTRANET/WLS1036/ejld1007",
+            "group:": "Entornos",
+            "folder:": "0.desarrollo",
+            "context:": "EXTRANET",
+            "tech:": "WLS1036"
+        }
+    ]
+}
