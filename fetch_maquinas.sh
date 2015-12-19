@@ -19,11 +19,23 @@ function collect {
     typeset COMMA="$4"
 
     if [ "$INDENTATION" == 1 ]; then
-        echo "    \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        if [ ! "$VALUE" = "null" ]; then
+            echo "    \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        else
+            echo "    \"$ATTR\": $VALUE$COMMA" | tee -a "$FICH_T"
+        fi
     elif [ "$INDENTATION" == 2 ]; then
-        echo "        \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        if [ ! "$VALUE" = "null" ]; then
+            echo "        \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        else
+            echo "        \"$ATTR\": $VALUE$COMMA" | tee -a "$FICH_T"
+        fi
     elif [ "$INDENTATION" == 3 ]; then
-        echo "            \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        if [ ! "$VALUE" = "null" ]; then
+            echo "            \"$ATTR\": \"$VALUE\"$COMMA" | tee -a "$FICH_T"
+        else
+            echo "            \"$ATTR\": $VALUE$COMMA" | tee -a "$FICH_T"
+        fi
     fi
 }
 
@@ -39,11 +51,11 @@ grep '<SessionData' $FICH_M | while read line; do
 
     echo "        {" | tee -a "$FICH_T"
 
-    collect __type__ Session 3 "," # for python deserialization
-    collect id: $ID 3 ","
-	collect session_name: $SESSION_NAME 3 ","
-	collect host_name: $HOST_NAME 3 ","
-	collect session_id: $SESSION_ID 3 ","
+    # collect __type__ Session 3 "," # for python deserialization
+    collect id $ID 3 ","
+	collect session_name $SESSION_NAME 3 ","
+	collect host_name $HOST_NAME 3 ","
+	collect session_id $SESSION_ID 3 ","
 
 	# si esta ordenado por servicios, extraemos campos de ese formato
 	if echo "$line" | fgrep 'SessionId="Servicios' > /dev/null; then
@@ -51,9 +63,11 @@ grep '<SessionData' $FICH_M | while read line; do
         FOLDER=$(echo $SESSION_ID | cut -d'/' -f2) # 22.interior
         ENVIRON=$(echo $SESSION_ID | cut -d'/' -f3) # 4.produccion
 
-        collect group: $GROUP 3 ","
-        collect folder: $FOLDER 3 ","
-        collect environ: $ENVIRON 3
+        collect group $GROUP 3 ","
+        collect folder $FOLDER 3 ","
+        collect environ $ENVIRON 3 ","
+        collect context null 3 ","
+        collect tech null 3
 
     # si por el contrario, esta ordenado por Entorno
     elif echo "$line" | fgrep 'SessionId="Entornos' > /dev/null; then
@@ -62,10 +76,11 @@ grep '<SessionData' $FICH_M | while read line; do
         CONTEXT=$(echo $SESSION_ID | cut -d'/' -f3) # EXTRANET
         TECH=$(echo $SESSION_ID | cut -d'/' -f4) # APACHE
 
-        collect group: $GROUP 3 ","
-        collect folder: $FOLDER 3 ","
-        collect context: $CONTEXT 3 ","
-        collect tech: $TECH 3
+        collect group $GROUP 3 ","
+        collect folder $FOLDER 3 ","
+        collect environ null 3 ","
+        collect context $CONTEXT 3 ","
+        collect tech $TECH 3
 
     fi
 
