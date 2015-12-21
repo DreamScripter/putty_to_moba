@@ -1,6 +1,12 @@
 import json
+import os
+import shutil
+from datetime import datetime
 
 SESSIONS="Sessions" # constant to define root object in .json file
+MOBAXTERM_CONFFILE="/home/mobaxterm/MyDocuments/MobaXterm/MobaXterm.ini"
+tmstmp = datetime.strftime(datetime.now(), '%Y%m%d_%H%M%S')
+
 
 class Session:
     """ Store a session info
@@ -51,9 +57,56 @@ class Session:
 
         return ses_list
 
+
+def backup_config(fin=MOBAXTERM_CONFFILE):
+    """ Make a backup of Mobaxterm configuration file
+    :param fin:
+    :return: backup_file: string containing the backup file name
+    """
+
+    global tmstmp
+    parent_dir = os.path.dirname(MOBAXTERM_CONFFILE)
+    backup_dir = os.path.join(parent_dir, "sessions_backup")
+    backup_file = os.path.join(backup_dir, os.path.basename(MOBAXTERM_CONFFILE) + "_" + tmstmp)
+
+    if not os.path.exists(backup_dir):
+        os.mkdir(backup_dir)
+
+    shutil.copy2(MOBAXTERM_CONFFILE, backup_file)
+
+    return backup_file
+
+
+def read_config(fin=MOBAXTERM_CONFFILE):
+    """ Return a string with the MobaXterm configuration
+    :param fin: file input to read
+    :return: str_conf: string containg config file
+    """
+
+    # return str_conf
+    with open(fin) as f:
+        str_conf = f.read()
+        return str_conf
+
+
+def dummy_write_config(fin=MOBAXTERM_CONFFILE):
+    """ Write Mobaxterm config file, appending (TODO)
+    :param fin: Configuration file
+    :return:
+    """
+
+    with open(fin, mode="a") as f:
+        f.write("-------------\n")
+        f.write("prueba\n")
+        f.write("-------------\n")
+
+
 if __name__ == '__main__':
     ses_list = Session.extract_data()
-    print("")
-    print("list of Session objects:")
-    print(ses_list)
+    print "Execution: ", tmstmp
+    print "Making backup file: ", backup_config()
+    print "Writing to config"
+    dummy_write_config()
+    print "list of Session objects:"
+    print ses_list
 
