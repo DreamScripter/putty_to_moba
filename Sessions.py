@@ -5,8 +5,13 @@ from datetime import datetime
 
 SESSIONS="Sessions" # constant to define root object in .json file
 MOBAXTERM_CONFFILE="/home/mobaxterm/MyDocuments/MobaXterm/MobaXterm.ini"
-tmstmp = datetime.strftime(datetime.now(), '%Y%m%d_%H%M%S')
-
+TMSTMP = datetime.strftime(datetime.now(), '%Y%m%d_%H%M%S')
+BOOKMARK_TAG = '[Bookmarks_Sessions_putty_to_moba]'
+USERNAME = "JCANOLAB"
+PROXY = "proxyges"
+PORT = "1080"
+FONT_SIZE = "11"
+TERM = "xterm"
 
 class Session:
     """ Store a session info
@@ -64,10 +69,10 @@ def backup_config(fin=MOBAXTERM_CONFFILE):
     :return: backup_file: string containing the backup file name
     """
 
-    global tmstmp
+    global TMSTMP
     parent_dir = os.path.dirname(MOBAXTERM_CONFFILE)
     backup_dir = os.path.join(parent_dir, "sessions_backup")
-    backup_file = os.path.join(backup_dir, os.path.basename(MOBAXTERM_CONFFILE) + "_" + tmstmp)
+    backup_file = os.path.join(backup_dir, os.path.basename(MOBAXTERM_CONFFILE) + "_" + TMSTMP)
 
     if not os.path.exists(backup_dir):
         os.mkdir(backup_dir)
@@ -89,24 +94,45 @@ def read_config(fin=MOBAXTERM_CONFFILE):
         return str_conf
 
 
-def dummy_write_config(fin=MOBAXTERM_CONFFILE):
+def get_group_objs(given_list, value):
+    """ Return a list of objects based on group
+    :param given_list: list to extract objects
+    :param value: value of the attribute group
+    :return: new list of objects that match criteria
+    """
+    new_list = []
+    for x in given_list:
+        if x.group == value:
+            new_list.append(x)
+
+    return new_list
+
+
+def dummy_write_config(l, fin=MOBAXTERM_CONFFILE):
     """ Write Mobaxterm config file, appending (TODO)
     :param fin: Configuration file
+    :param l: list of objects to write
     :return:
     """
 
     with open(fin, mode="a") as f:
-        f.write("-------------\n")
-        f.write("prueba\n")
-        f.write("-------------\n")
+        f.write(BOOKMARK_TAG + "\n")
+        f.write("SubRep=level3\n")
+        f.write("ImgNum=41\n")
 
+        for obj in l:
+            f.write(obj.session_name + "=#109#0%" + obj.host_name + "%22%" + USERNAME + "%%-1%-1%%%22%%0%0%Interactive shell%%%-1%0%0%2%" + PROXY + "%" + PORT + "%%0#Source Code Pro%" + FONT_SIZE + "%0%0%0%15%236,236,236%0,0,0%180,180,192%0%-1%0%%" + TERM + "%-1%0%0,0,0%54,54,54%255,96,96%255,128,128%96,255,96%128,255,128%255,255,54%255,255,128%96,96,255%128,128,255%255,54,255%255,128,255%54,255,255%128,255,255%236,236,236%255,255,255%80%24%0#0" + "\n")
+
+        f.write("\n")
 
 if __name__ == '__main__':
     ses_list = Session.extract_data()
-    print "Execution: ", tmstmp
+    print "Execution: ", TMSTMP
     print "Making backup file: ", backup_config()
-    print "Writing to config"
-    dummy_write_config()
-    print "list of Session objects:"
-    print ses_list
 
+    entornos_list = get_group_objs(ses_list, "Entornos")
+    servicios_list = get_group_objs(ses_list, "Servicios")
+
+    print "Writing to config"
+    dummy_write_config(entornos_list)
+    dummy_write_config(servicios_list)
